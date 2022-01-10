@@ -33,9 +33,13 @@ namespace Elite
 
 		void Update(float elapsedSec);
 
-		const FMatrix4& GetWorldToView() const { return m_WorldToView; }
-		const FMatrix4& GetViewToWorld() const { return m_ViewToWorld; }
-		const FMatrix4& GetProjection() const { return  m_Projection;  }
+		const FMatrix4& GetLHWorldToView() const { return m_LHWorldToView; }
+		const FMatrix4& GetLHViewToWorld() const { return m_LHViewToWorld; }
+		const FMatrix4& GetLHProjection() const { return  m_LHProjection;  }
+
+		const FMatrix4& GetRHWorldToView() const { return m_RHWorldToView; }
+		const FMatrix4& GetRHViewToWorld() const { return m_RHViewToWorld; }
+		const FMatrix4& GetRHProjection() const { return  m_RHProjection; }
 
 		int GetScreenWidth() const { return m_Width; }
 		int GetScreenHeight() const { return m_Height; }
@@ -62,11 +66,16 @@ namespace Elite
 		FPoint3 m_Position{};
 		const FVector3 m_ViewForward{};
 
-		FMatrix4 m_WorldToView{};
-		FMatrix4 m_ViewToWorld{};
+		FMatrix4 m_LHWorldToView{};
+		FMatrix4 m_LHViewToWorld{};
+		FMatrix4 m_LHProjection{};
+
+		FMatrix4 m_RHWorldToView{};
+		FMatrix4 m_RHViewToWorld{};
+		FMatrix4 m_RHProjection{};
 
 		const float m_NearClipPlane;
 		const float m_FarClipPlane;
-		FMatrix4 m_Projection;
+
 	};
 }

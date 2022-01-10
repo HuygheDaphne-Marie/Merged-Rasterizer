@@ -77,9 +77,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="ExhaustMaterial.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="ECamera.h" />
+    <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="SoftwareRenderer.h" />
+    <ClInclude Include="TransformationHelper.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="TriangleMesh.h" />
     <ClInclude Include="VehicleMaterial.h" />
     <ClInclude Include="EMath.h" />
     <ClInclude Include="EMathUtilities.h" />
@@ -92,7 +99,7 @@
     <ClInclude Include="EPoint2.h" />
     <ClInclude Include="EPoint3.h" />
     <ClInclude Include="EPoint4.h" />
-    <ClInclude Include="ERenderer.h" />
+    <ClInclude Include="EDirectxRenderer.h" />
     <ClInclude Include="ERGBColor.h" />
     <ClInclude Include="ETimer.h" />
     <ClInclude Include="EVector.h" />
@@ -108,11 +115,16 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="ExhaustMaterial.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="ECamera.cpp" />
+    <ClCompile Include="SoftwareRenderer.cpp" />
+    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="TriangleMesh.cpp" />
     <ClCompile Include="VehicleMaterial.cpp" />
-    <ClCompile Include="ERenderer.cpp" />
+    <ClCompile Include="EDirectxRenderer.cpp" />
     <ClCompile Include="ETimer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />

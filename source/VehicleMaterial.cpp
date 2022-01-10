@@ -33,7 +33,7 @@ void VehicleMaterial::Update()
 	// Set Matrices
 	const Camera* pCamera = SceneManager::GetInstance().GetActiveScene().GetCamera();
 	SetEffectMatrix("gWorldMatrix", m_pWorldMatrixVariable, Elite::FMatrix4::Identity()); // Todo: actually get a world matrix for a mesh
-	SetEffectMatrix("gWorldMatrix", m_pViewInverseMatrixVariable, pCamera->GetViewToWorld());
+	SetEffectMatrix("gWorldMatrix", m_pViewInverseMatrixVariable, pCamera->GetLHViewToWorld());
 
 	// Set Texture/Maps
 	SetEffectShaderResource("gDiffuseMap", m_pDiffuseMapVariable, m_pDiffuse);

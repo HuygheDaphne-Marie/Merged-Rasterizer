@@ -47,7 +47,7 @@ void Material::GotoNextTechnique()
 void Material::Update()
 {
 	const Camera* pCamera = SceneManager::GetInstance().GetActiveScene().GetCamera();
-	SetEffectMatrix("gWorldViewProj", m_pWorldViewProjVariable, pCamera->GetProjection() * pCamera->GetWorldToView());
+	SetEffectMatrix("gWorldViewProj", m_pWorldViewProjVariable, pCamera->GetLHProjection() * pCamera->GetLHWorldToView());
 
 	// Rest has to be done by subclasses in their overloaded Update() function
 }

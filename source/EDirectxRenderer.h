@@ -4,9 +4,9 @@
 /*=============================================================================*/
 // ERenderer.h: class that holds the surface to render too + DirectX initialization.
 /*=============================================================================*/
-#ifndef ELITE_RAYTRACING_RENDERER
-#define	ELITE_RAYTRACING_RENDERER
-
+#ifndef ELITE_RAYTRACING_RENDERER_DIRECTX
+#define	ELITE_RAYTRACING_RENDERER_DIRECTX
+#include "BaseRenderer.h"
 #include <cstdint>
 
 struct SDL_Window;
@@ -14,27 +14,22 @@ struct SDL_Surface;
 
 namespace Elite
 {
-	class Renderer final
+	class DirectxRenderer final : public BaseRenderer
 	{
 	public:
-		Renderer(SDL_Window* pWindow);
-		~Renderer();
+		DirectxRenderer(SDL_Window* pWindow);
+		~DirectxRenderer() override;
 
-		Renderer(const Renderer&) = delete;
-		Renderer(Renderer&&) noexcept = delete;
-		Renderer& operator=(const Renderer&) = delete;
-		Renderer& operator=(Renderer&&) noexcept = delete;
+		DirectxRenderer(const DirectxRenderer&) = delete;
+		DirectxRenderer(DirectxRenderer&&) noexcept = delete;
+		DirectxRenderer& operator=(const DirectxRenderer&) = delete;
+		DirectxRenderer& operator=(DirectxRenderer&&) noexcept = delete;
 
-		void Render();
+		void Render() override;
 
 		ID3D11Device* GetDevice() const;
 
 	private:
-		SDL_Window* m_pWindow;
-		uint32_t m_Width;
-		uint32_t m_Height;
-		RGBColor m_ClearColor{0.f, 0.f, 0.3f};
-		
 		bool m_IsInitialized;
 
 		// DirectX Resources

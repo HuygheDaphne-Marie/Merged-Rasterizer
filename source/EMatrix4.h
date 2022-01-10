@@ -149,7 +149,7 @@ namespace Elite
 		//Reminder: when transforming normals (like vectors, so no translation), you have to multiply with
 		//the transpose of the inverse of the original matrix, because they do not behave in the same way!
 		//So vector transformation -> M * v , while normal transformation with same matrix -> inv(transp(M)) * n
-		inline Vector<4, T> operator*(const Vector<4, T>& v)
+		inline Vector<4, T> operator*(const Vector<4, T>& v) const
 		{
 			const Matrix<4, 4, T>& m = (*this);
 			return Vector<4, T>(
@@ -159,7 +159,7 @@ namespace Elite
 		}
 
 		//Takes into account translation for a point.
-		inline Point<4, T> operator*(const Point<4, T>& p)
+		inline Point<4, T> operator*(const Point<4, T>& p) const
 		{
 			const Matrix<4, 4, T>& m = (*this);
 			return Point<4, T>(

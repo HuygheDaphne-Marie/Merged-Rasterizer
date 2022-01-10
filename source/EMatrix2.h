@@ -82,7 +82,7 @@ namespace Elite
 				data[0][1] * revS, data[1][1] * revS);
 		}
 
-		inline Matrix<2, 2, T> operator*(const Matrix<2, 2, T>& rm)
+		inline Matrix<2, 2, T> operator*(const Matrix<2, 2, T>& rm) const
 		{
 			const Matrix<2, 2, T>& lm = (*this);
 			return Matrix<2, 2, T>(
@@ -93,7 +93,7 @@ namespace Elite
 				lm(1, 0) * rm(0, 1) + lm(1, 1) * rm(1, 1));
 		}
 
-		inline Vector<2, T> operator*(const Vector<2, T>& v)
+		inline Vector<2, T> operator*(const Vector<2, T>& v) const 
 		{
 			const Matrix<2, 2, T>& m = (*this);
 			return Vector<2, T>(

@@ -1,7 +1,7 @@
 #include "pch.h"
 
 //Project includes
-#include "ERenderer.h"
+#include "EDirectxRenderer.h"
 
 // DirectX Headers
 #include <dxgi.h>
@@ -14,17 +14,10 @@
 
 #include "SceneManager.h"
 
-Elite::Renderer::Renderer(SDL_Window * pWindow)
-	: m_pWindow{ pWindow }
-	, m_Width{}
-	, m_Height{}
+Elite::DirectxRenderer::DirectxRenderer(SDL_Window * pWindow)
+	: BaseRenderer(pWindow)
 	, m_IsInitialized{ false }
 {
-	int width, height = 0;
-	SDL_GetWindowSize(pWindow, &width, &height);
-	m_Width = static_cast<uint32_t>(width);
-	m_Height = static_cast<uint32_t>(height);
-
 	//Initialize DirectX pipeline
 	const HRESULT initResult = InitialiseDirectX();
 
@@ -36,7 +29,7 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	}
 }
 
-Elite::Renderer::~Renderer()
+Elite::DirectxRenderer::~DirectxRenderer()
 {
 	m_pRenderTargetView->Release();
 	m_pRenderTargetBuffer->Release();
@@ -57,7 +50,7 @@ Elite::Renderer::~Renderer()
 	m_pDXGIFactory->Release();
 }
 
-void Elite::Renderer::Render()
+void Elite::DirectxRenderer::Render()
 {
 	if (!m_IsInitialized) 
 		return;
@@ -67,7 +60,7 @@ void Elite::Renderer::Render()
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	// Render
-	for (Mesh* mesh : SceneManager::GetInstance().GetActiveScene().GetGeometries())
+	for (Mesh* mesh : SceneManager::GetInstance().GetActiveScene().GetMeshes())
 	{
 		mesh->Render(m_pDeviceContext);
 	}
@@ -76,12 +69,12 @@ void Elite::Renderer::Render()
 	m_pSwapChain->Present(0, 0);
 }
 
-ID3D11Device* Elite::Renderer::GetDevice() const
+ID3D11Device* Elite::DirectxRenderer::GetDevice() const
 {
 	return m_pDevice;
 }
 
-HRESULT Elite::Renderer::InitialiseDirectX()
+HRESULT Elite::DirectxRenderer::InitialiseDirectX()
 {
 	HRESULT result;
 	
