@@ -23,6 +23,14 @@
 #include "SoftwareRenderer.h"
 #include "TriangleMesh.h"
 
+enum class FilterMode
+{
+	Point = 0,
+	Linear = 1,
+	Anisotropic = 2,
+	EndDoNotUse = 3
+};
+
 using namespace Elite;
 
 void ShutDown(SDL_Window* pWindow)
@@ -111,6 +119,7 @@ int main(int argc, char* args[])
 	bool isLooping = true;
 	bool isUsingHardwareRasterizer = true;
 	bool isVehicleRotating = false;
+	FilterMode currentFilterMode = FilterMode::Point;
 
 	while (isLooping)
 	{
@@ -129,6 +138,22 @@ int main(int argc, char* args[])
 					for (auto* pMesh : activeScene.GetMeshes())
 					{
 						pMesh->GetMaterial()->GotoNextTechnique();
+					}
+
+					int newFilterModeValue = (static_cast<int>(currentFilterMode) + 1) % static_cast<int>(FilterMode::EndDoNotUse);
+					currentFilterMode = static_cast<FilterMode>(newFilterModeValue);
+
+					switch (currentFilterMode)
+					{
+					case FilterMode::Point:
+						std::cout << "Filtering set to Point mode\n";
+						break;
+					case FilterMode::Linear:
+						std::cout << "Filtering set to Linear mode\n";
+						break;
+					case FilterMode::Anisotropic:
+						std::cout << "Filtering set to Anisotropic mode\n";
+						break;
 					}
 				}
 
