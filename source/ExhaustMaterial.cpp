@@ -14,9 +14,9 @@ ExhaustMaterial::~ExhaustMaterial()
 	delete m_pDiffuse;
 }
 
-void ExhaustMaterial::Update()
+void ExhaustMaterial::Update(Mesh* pMesh)
 {
-	Material::Update();
+	Material::Update(pMesh);
 
 	SetEffectShaderResource("gDiffuseMap", m_pDiffuseMapVariable, m_pDiffuse);
 }

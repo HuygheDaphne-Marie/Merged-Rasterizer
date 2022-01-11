@@ -8,9 +8,10 @@ namespace Elite
 		m_Width(screenWidth),
 		m_Height(screenHeight),
 		m_AspectRatio{ static_cast<float>(screenWidth) / static_cast<float>(screenHeight) },
-		m_Fov(tanf((fovAngle * static_cast<float>(E_TO_RADIANS)) / 2.f)),
-		m_Position{ position.x, position.y, -position.z },
-		m_ViewForward{GetNormalized(viewForward)},
+		m_Fov(tanf((fovAngle* static_cast<float>(E_TO_RADIANS)) / 2.f)),
+		m_LHPosition{ position },
+		m_RHPosition{ position },
+		m_ViewForward{ GetNormalized(viewForward) },
 		m_NearClipPlane(nearClip),
 		m_FarClipPlane(farClip)
 	{
@@ -48,6 +49,8 @@ namespace Elite
 			m_RelativeTranslation.y -= y * m_MouseMoveSensitivity * elapsedSec;
 		}
 
+
+
 		//Update LookAt (view2world & world2view matrices)
 		//*************
 		CalculateLookAt();
@@ -57,33 +60,9 @@ namespace Elite
 	{
 		// Left handed
 		{
-			// Kept in case of disaster, this worked fine for camera movement
-			////FORWARD (zAxis) with YAW applied
-			//FMatrix3 yawRotation = MakeRotationY(m_AbsoluteRotation.y * static_cast<float>(E_TO_RADIANS));
-			//FVector3 zAxis = yawRotation * m_ViewForward;
-			//
-			//const FVector3 xAxis{Cross(FVector3{0,1,0}, zAxis)};
-			//
-			////FORWARD with PITCH applied (based on xAxis)
-			//FMatrix3 pitchRotation = MakeRotation(m_AbsoluteRotation.x * static_cast<float>(E_TO_RADIANS), xAxis);
-			//zAxis = pitchRotation * zAxis;
-			//
-			//const FVector3 yAxis{ Cross(zAxis, xAxis) };
-			//
-			//m_LHViewToWorld[0] = { xAxis, 0 };
-			//m_LHViewToWorld[1] = { yAxis, 0 };
-			//m_LHViewToWorld[2] = { zAxis, 0 };
-			//m_LHViewToWorld[3] = { m_Position.x, m_Position.y, -m_Position.z, 1 };
-			//
-			//////Translate based on transformed axis
-			//m_Position += m_RelativeTranslation.x * xAxis;
-			//m_Position += m_RelativeTranslation.y * yAxis;
-			//m_Position += m_RelativeTranslation.z * zAxis;
-
-
 			//FORWARD (zAxis) with YAW applied
 			FMatrix3 yawRotation = MakeRotationY(m_AbsoluteRotation.y * static_cast<float>(E_TO_RADIANS));
-			FVector3 zAxis = yawRotation * m_ViewForward;
+			FVector3 zAxis = yawRotation * -m_ViewForward;
 
 			//Calculate RIGHT (xAxis) based on transformed FORWARD
 			const FVector3 xAxis = GetNormalized(Cross(FVector3{ 0.f,1.f,0.f }, zAxis));
@@ -96,9 +75,9 @@ namespace Elite
 			const FVector3 yAxis = Cross(zAxis, xAxis);
 
 			//Translate based on transformed axis
-			m_Position += m_RelativeTranslation.x * xAxis;
-			m_Position += m_RelativeTranslation.y * yAxis;
-			m_Position += m_RelativeTranslation.z * zAxis;
+			m_LHPosition += m_RelativeTranslation.x * xAxis;
+			m_LHPosition += m_RelativeTranslation.y * yAxis;
+			m_LHPosition += -m_RelativeTranslation.z * zAxis;
 
 			//Construct View2World Matrix
 			m_LHViewToWorld =
@@ -106,7 +85,7 @@ namespace Elite
 				FVector4{xAxis},
 				FVector4{yAxis},
 				FVector4{zAxis},
-				FVector4{m_Position.x,m_Position.y,-m_Position.z,1.f}
+				FVector4{m_LHPosition.x,m_LHPosition.y,m_LHPosition.z,1.f}
 			};
 
 			//Construct World2View Matrix
@@ -130,9 +109,9 @@ namespace Elite
 			FVector3 yAxis = Cross(zAxis, xAxis);
 
 			//Translate based on transformed axis
-			m_Position += m_RelativeTranslation.x * xAxis;
-			m_Position += m_RelativeTranslation.y * yAxis;
-			m_Position += m_RelativeTranslation.z * zAxis;
+			m_RHPosition += m_RelativeTranslation.x * xAxis;
+			m_RHPosition += m_RelativeTranslation.y * yAxis;
+			m_RHPosition += m_RelativeTranslation.z * zAxis;
 
 			//Construct View2World Matrix
 			m_RHViewToWorld =
@@ -140,7 +119,7 @@ namespace Elite
 				FVector4{xAxis},
 				FVector4{yAxis},
 				FVector4{zAxis},
-				FVector4{m_Position.x,m_Position.y,m_Position.z,1.f}
+				FVector4{m_RHPosition.x,m_RHPosition.y,m_RHPosition.z,1.f}
 			};
 
 			//Construct World2View Matrix

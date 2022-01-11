@@ -1,6 +1,8 @@
 #pragma once
 #include "Material.h"
 
+
+
 class VehicleMaterial final : public Material
 {
 public:
@@ -11,7 +13,7 @@ public:
 	VehicleMaterial operator=(VehicleMaterial&& other) = delete;
 	~VehicleMaterial() override;
 
-	void Update() override;
+	void Update(Mesh* pMesh) override;
 
 	// Sort of dirty, but it's the easiest way of handing these to the material
 	void SetDiffuseTexture(Texture* pDiffuseTexture);

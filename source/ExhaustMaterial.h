@@ -10,7 +10,7 @@ public:
 	ExhaustMaterial operator=(ExhaustMaterial&& other) = delete;
 	~ExhaustMaterial() override;
 
-	void Update() override;
+	void Update(Mesh* pMesh) override;
 
 private:
 	ID3DX11EffectShaderResourceVariable* m_pDiffuseMapVariable;

@@ -26,14 +26,14 @@ VehicleMaterial::~VehicleMaterial()
 	delete m_pGlossinessMap;
 }
 
-void VehicleMaterial::Update()
+void VehicleMaterial::Update(Mesh* pMesh)
 {
-	Material::Update(); // Always call Material's update first (to set the WorldViewProjection matrix)
+	Material::Update(pMesh); // Always call Material's update first (to set the WorldViewProjection matrix)
 
 	// Set Matrices
 	const Camera* pCamera = SceneManager::GetInstance().GetActiveScene().GetCamera();
-	SetEffectMatrix("gWorldMatrix", m_pWorldMatrixVariable, Elite::FMatrix4::Identity()); // Todo: actually get a world matrix for a mesh
-	SetEffectMatrix("gWorldMatrix", m_pViewInverseMatrixVariable, pCamera->GetLHViewToWorld());
+	SetEffectMatrix("gWorldMatrix", m_pWorldMatrixVariable, pMesh->GetTransform()); // Todo: actually get a world matrix for a mesh
+	SetEffectMatrix("gViewInverseMatrix", m_pViewInverseMatrixVariable, pCamera->GetLHViewToWorld());
 
 	// Set Texture/Maps
 	SetEffectShaderResource("gDiffuseMap", m_pDiffuseMapVariable, m_pDiffuse);

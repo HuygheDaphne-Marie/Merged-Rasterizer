@@ -2,6 +2,7 @@
 #include <vector>
 
 class Texture;
+class Mesh;
 
 class Material
 {
@@ -18,7 +19,7 @@ public:
 
 	void GotoNextTechnique();
 
-	virtual void Update();
+	virtual void Update(Mesh* pMesh);
 
 protected:
 	// Shader Variables

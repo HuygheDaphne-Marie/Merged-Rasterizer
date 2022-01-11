@@ -26,7 +26,7 @@ namespace Elite
 		SDL_Window* m_pWindow;
 		uint32_t m_Width;
 		uint32_t m_Height;
-		RGBColor m_ClearColor{ 0.f, 0.f, 0.3f };
+		RGBColor m_ClearColor{ 0.1f, 0.1f, 0.1f };
 	};
 }
 #endif

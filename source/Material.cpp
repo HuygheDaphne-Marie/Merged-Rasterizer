@@ -44,10 +44,10 @@ void Material::GotoNextTechnique()
 }
 
 // Base material update, will only set the WorldViewProjection
-void Material::Update()
+void Material::Update(Mesh* pMesh)
 {
 	const Camera* pCamera = SceneManager::GetInstance().GetActiveScene().GetCamera();
-	SetEffectMatrix("gWorldViewProj", m_pWorldViewProjVariable, pCamera->GetLHProjection() * pCamera->GetLHWorldToView());
+	SetEffectMatrix("gWorldViewProj", m_pWorldViewProjVariable, pCamera->GetLHProjection() * pCamera->GetLHWorldToView() * pMesh->GetTransform());
 
 	// Rest has to be done by subclasses in their overloaded Update() function
 }

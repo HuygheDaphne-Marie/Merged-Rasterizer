@@ -12,9 +12,6 @@ TriangleMesh::TriangleMesh(const FPoint3& position, const std::vector<IVertex>& 
 	, m_Indices(indices)
 	, m_Topology(topology)
 {
-	m_WorldVertices.insert(m_WorldVertices.end(), m_ModelVertices.begin(), m_ModelVertices.end());
-	RecalculateWorldVertices();
-
 	m_ModelVertices.reserve(vertices.size());
 	for (const IVertex& iVertex : vertices)
 	{
@@ -29,6 +26,9 @@ TriangleMesh::TriangleMesh(const FPoint3& position, const std::vector<IVertex>& 
 			}
 		);
 	}
+
+	m_WorldVertices.insert(m_WorldVertices.end(), m_ModelVertices.begin(), m_ModelVertices.end());
+	RecalculateWorldVertices();
 }
 
 std::vector<Vertex> TriangleMesh::GetModelVertices() const

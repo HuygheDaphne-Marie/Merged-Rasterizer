@@ -1,6 +1,11 @@
 #include "pch.h"
 //#undef main
 
+#ifdef _DEBUG
+	#include <vld.h>
+#endif
+
+
 //Standard includes
 #include <iostream>
 
@@ -61,6 +66,10 @@ int main(int argc, char* args[])
 	// Init Meshes
 	SceneGraph& activeScene = sceneManager.GetActiveScene();
 	activeScene.SetCamera(new Camera(width, height));
+
+	TriangleMesh* pTriangleMeshVehicle{ nullptr };
+	Mesh* pMeshVehicle{ nullptr };
+	Mesh* pFireFX{ nullptr };
 	{
 		{
 			std::vector<IVertex> verticesFromFile{};
@@ -73,11 +82,11 @@ int main(int argc, char* args[])
 			pVehicleMaterial->SetSpecularMap(new Texture("Resources/vehicle_specular.png", directxRenderer->GetDevice()));
 			pVehicleMaterial->SetGlossinessMap(new Texture("Resources/vehicle_gloss.png", directxRenderer->GetDevice()));
 
-			Mesh* pMesh = new Mesh(directxRenderer->GetDevice(), verticesFromFile, indices, pVehicleMaterial);
-			activeScene.AddMeshToScene(pMesh);
+			pMeshVehicle = new Mesh(directxRenderer->GetDevice(), verticesFromFile, indices, pVehicleMaterial);
+			activeScene.AddMeshToScene(pMeshVehicle);
 
-			TriangleMesh* pVehicle{ new TriangleMesh(FPoint3{ 0,0,0 }, verticesFromFile, indices) };
-			activeScene.AddGeometryToScene(pVehicle);
+			pTriangleMeshVehicle = new TriangleMesh(FPoint3{ 0,0,0 }, verticesFromFile, indices);
+			activeScene.AddGeometryToScene(pTriangleMeshVehicle);
 		}
 
 		{
@@ -91,8 +100,8 @@ int main(int argc, char* args[])
 					new Texture("Resources/fireFX_diffuse.png", directxRenderer->GetDevice()))
 			};
 
-			Mesh* pMesh = new Mesh(directxRenderer->GetDevice(), verticesFromFile, indices, pExhaustMaterial);
-			activeScene.AddMeshToScene(pMesh);
+			pFireFX = new Mesh(directxRenderer->GetDevice(), verticesFromFile, indices, pExhaustMaterial);
+			activeScene.AddMeshToScene(pFireFX);
 		}
 	}
 	
@@ -101,6 +110,7 @@ int main(int argc, char* args[])
 	float printTimer = 0.f;
 	bool isLooping = true;
 	bool isUsingHardwareRasterizer = true;
+	bool isVehicleRotating = false;
 
 	while (isLooping)
 	{
@@ -122,16 +132,39 @@ int main(int argc, char* args[])
 					}
 				}
 
-				if (e.key.keysym.sym == SDLK_t)
+				if (e.key.keysym.sym == SDLK_e)
 				{
 					isUsingHardwareRasterizer = !isUsingHardwareRasterizer;
+					if (isUsingHardwareRasterizer)
+						std::cout << "Switched to Hardware Rasterizer (DirectX)\n";
+					else
+						std::cout << "Switched to Software Rasterizer\n";
 				}
+
+				if (e.key.keysym.sym == SDLK_t)
+				{
+					pFireFX->SetIsActive(!pFireFX->GetIsActive());
+					if (!pFireFX->GetIsActive())
+						std::cout << "FireFX mesh hidden\n";
+					else
+						std::cout << "FireFX mesh visible\n";
+				}
+
+				if (e.key.keysym.scancode == SDL_SCANCODE_R)
+					isVehicleRotating = !isVehicleRotating;
 				break;
 			}
 		}
 
 		// Update
 		activeScene.GetCamera()->Update(pTimer->GetElapsed());
+		if (isVehicleRotating)
+		{
+			Elite::FMatrix3 rotation{ MakeRotationY(ToRadians(45.f * pTimer->GetElapsed())) };
+			pTriangleMeshVehicle->SetForward(rotation * pTriangleMeshVehicle->GetForward());
+			// todo: rotate Mesh
+			pMeshVehicle->SetForward(rotation * pMeshVehicle->GetForward());
+		}
 
 		//--------- Render ---------
 		if (isUsingHardwareRasterizer)

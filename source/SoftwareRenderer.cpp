@@ -41,9 +41,9 @@ void SoftwareRenderer::Render()
 		for (uint32_t col = 0; col < m_Width; ++col)
 		{
 			m_pBackBufferPixels[PixelToBufferIndex(col, row, m_Width)] = SDL_MapRGB(m_pBackBuffer->format,
-				0,
-				0,
-				0);
+				static_cast<Uint8>(m_ClearColor.r * 255.f),
+				static_cast<Uint8>(m_ClearColor.g * 255.f),
+				static_cast<Uint8>(m_ClearColor.b * 255.f));
 		}
 	}
 

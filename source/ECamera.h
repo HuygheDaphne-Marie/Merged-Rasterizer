@@ -18,8 +18,8 @@ namespace Elite
 		(
 			const int screenWidth, 
 			const int screenHeight, 
-			const FPoint3& position = { 0.f, 0.f, -10.f }, 
-			const FVector3& viewForward = { 0.f, 0.f, 1.f }, 
+			const FPoint3& position = { 0.f, 0.f, -30.f }, 
+			const FVector3& viewForward = { 0.f, 0.f, -1.f }, 
 			float fovAngle = 60.f, 
 			float nearClip = 0.1f, 
 			float farClip = 100.f
@@ -63,7 +63,8 @@ namespace Elite
 		FPoint2 m_AbsoluteRotation{}; //Pitch(x) & Yaw(y) only
 		FPoint3 m_RelativeTranslation{};
 
-		FPoint3 m_Position{};
+		FPoint3 m_LHPosition{};
+		FPoint3 m_RHPosition{};
 		const FVector3 m_ViewForward{};
 
 		FMatrix4 m_LHWorldToView{};
