@@ -47,8 +47,8 @@ void TriangleMesh::Project(std::vector<Vertex>& vertices) const
 	// Vertices now in NDC space
 
 	// Normal & Tangent
-	TransformVertexNormals(pCamera->GetRHViewToWorld(), vertices);
-	TransformVertexTangents(pCamera->GetRHViewToWorld(), vertices);
+	TransformVertexNormals(GetTransform(), vertices);
+	TransformVertexTangents(GetTransform(), vertices);
 
 	// Todo: View Direction 
 }

@@ -16,6 +16,7 @@ SoftwareRenderer::SoftwareRenderer(SDL_Window* pWindow, Texture* pDiffuse, Textu
 	, m_pNormalMap(pNormal)
 {
 	//Initialize
+	m_pFrontBuffer = SDL_GetWindowSurface(pWindow);
 	m_pBackBuffer = SDL_CreateRGBSurface(0, m_Width, m_Height, 32, 0, 0, 0, 0);
 	m_pBackBufferPixels = static_cast<uint32_t*>(m_pBackBuffer->pixels);
 
@@ -65,8 +66,8 @@ void SoftwareRenderer::Render()
 			{
 				// PixelShading is broken for now 
 				// Todo: fix it could be tangent, normal, tangent space, or just the damn light, I do not know
-				finalPixelColor = PixelShading(vertex);
-				//finalPixelColor = m_pTexture.Sample(vertex.uv);
+				//finalPixelColor = PixelShading(vertex);
+				finalPixelColor = m_pTexture->Sample(vertex.uv);
 			}
 
 			m_pBackBufferPixels
@@ -78,9 +79,9 @@ void SoftwareRenderer::Render()
 						m_Width
 					)
 				] = SDL_MapRGB(m_pBackBuffer->format,
-					static_cast<Uint8>(m_ClearColor.r * 255.f),
-					static_cast<Uint8>(m_ClearColor.g * 255.f),
-					static_cast<Uint8>(m_ClearColor.b * 255.f));
+					static_cast<Uint8>(finalPixelColor.r * 255.f),
+					static_cast<Uint8>(finalPixelColor.g * 255.f),
+					static_cast<Uint8>(finalPixelColor.b * 255.f));
 		}
 	}
 
